@@ -10,29 +10,29 @@ env:
 jobs:
   test:
     name: Test in ${{ matrix.testMode }} on version ${{ matrix.unityVersion }}
-      runs-on: ubuntu-latest
-      strategy:
-        fail-fast: false
-        matrix:
-          unityVersion:
-            - 2020.1.13f1
-          testMode:
-            - playmode
-            - editmode
-      steps:
-        - uses: actions/checkout@v2
-          with:
-            lfs: true
-        - uses: webbertakken/unity-test-runner@v1.4
-          id: tests
-          with:
-            unityVersion: ${{ matrix.unityVersion }}
-            testMode: ${{ matrix.testMode }}
-            artifactsPath: ${{ matrix.testMode }}-artifacts
-        - uses: actions/upload-artifact@v1
-          with:
-            name: Test results for ${{ matrix.testMode }}
-            path: ${{ steps.tests.outputs.artifactsPath }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2020.1.13f1
+        testMode:
+          - playmode
+          - editmode
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: webbertakken/unity-test-runner@v1.4
+        id: tests
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+      - uses: actions/upload-artifact@v1
+        with:
+          name: Test results for ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
   build:
     name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
