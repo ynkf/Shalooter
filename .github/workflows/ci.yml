@@ -64,7 +64,6 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          customParameters: '-nographics'
       - uses: actions/upload-artifact@v1
         with:
           name: Shalooter
