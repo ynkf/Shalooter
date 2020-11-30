@@ -8,6 +8,18 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_KEY }}
 
 jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: docker://github/super-linter:v3
+        env:
+          VALIDATE_ALL_CODEBASE: false
   test:
     name: Test in ${{ matrix.testMode }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
