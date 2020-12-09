@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (CheckGround() && input.magnitude == 0f)
         {
-            print("velocity == 0");
+          //  print("velocity == 0");
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             return;
         }
