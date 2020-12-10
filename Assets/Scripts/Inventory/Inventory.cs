@@ -18,6 +18,11 @@ public class Inventory : MonoBehaviour
     public GameObject WeaponSelector;
     public GameObject InventoryBar;
 
+    //Inventory Text
+    public Text InventoryMainWeapon;
+    public Text InventorySecondaryWeapon;
+    public Text InventoryThrowable;
+
     //Define MainWeapons
     public GameObject M4;
     public GameObject M200;
@@ -59,6 +64,8 @@ public class Inventory : MonoBehaviour
             GameObject.Find(weapon).SetActive(false);
         }
 
+        InventoryBar.SetActive(false);
+
         //add listener on the button
         Button btn = BeginButton.GetComponent<Button>();
         btn.onClick.AddListener(OnClickStart);
@@ -89,15 +96,14 @@ public class Inventory : MonoBehaviour
         print(MainWeaponName + SecondaryWeaponName + ThrowableName);
 
         //Hide the big weapon selector and show the smaller inventory
-        HideUI();
+
+        WeaponSelector.SetActive(false);
+        InventoryBar.SetActive(true);
 
         ActivateWeapon();
 
-    }
+        SetInventoryText();
 
-    void HideUI()
-    {
-        WeaponSelector.SetActive(false);
     }
 
     void ActivateWeapon()
@@ -145,6 +151,13 @@ public class Inventory : MonoBehaviour
             F1.SetActive(true);
         }
     }
+
+    void SetInventoryText()
+    {
+        InventoryMainWeapon.text = MainWeaponName;
+        InventorySecondaryWeapon.text = SecondaryWeaponName;
+        InventoryThrowable.text = ThrowableName;
+}
 
 
 }
