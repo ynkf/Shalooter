@@ -47,23 +47,14 @@ public class Inventory : MonoBehaviour
     List<string> SecondaryWeapon = new List<string>() { "M9", "RPG7", "SPAS12", "Knife" };
     List<string> Throwables = new List<string>() { "Grenade" };
 
+    //int for telling which weapon is active 0 = main, 1 = secondary, 2 = throwable
+    private int activeWeapon = 0;
 
     // Start is called before the first frame update
     void Start()
       {
-        foreach (string weapon in MainWeapons)
-        {
-            GameObject.Find(weapon).SetActive(false);
-        }
-        foreach (string weapon in SecondaryWeapon)
-        {
-            GameObject.Find(weapon).SetActive(false);
-        }
-        foreach (string weapon in Throwables)
-        {
-            GameObject.Find(weapon).SetActive(false);
-        }
 
+        DeactivateAllWeapons();
         InventoryBar.SetActive(false);
 
         //add listener on the button
@@ -78,7 +69,23 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown("1"))
+        {
+            DeactivateActiveWeapon();
+            ActivateMainWeapon();
+        }
+
+        if (Input.GetKeyDown("2"))
+        {
+            DeactivateActiveWeapon();
+            ActivateSecondary();
+        }
+
+        if (Input.GetKeyDown("3"))
+        {
+            DeactivateActiveWeapon();
+            ActivateThrowable();
+        }
     }      
 
     void PopulateLists()
@@ -100,36 +107,68 @@ public class Inventory : MonoBehaviour
         WeaponSelector.SetActive(false);
         InventoryBar.SetActive(true);
 
-        ActivateWeapon();
-
         SetInventoryText();
+        ActivateMainWeapon();
 
     }
 
-    void ActivateWeapon()
+    void SetInventoryText()
     {
-        //Activate Main Weapon
-        if(MainWeaponName == "M4")
+        InventoryMainWeapon.text = MainWeaponName;
+        InventorySecondaryWeapon.text = SecondaryWeaponName;
+        InventoryThrowable.text = ThrowableName;
+    }
+
+    void DeactivateAllWeapons()
+    {
+        foreach (string weapon in MainWeapons)
+        {             
+            GameObject.Find(weapon).SetActive(false);
+        }
+        foreach (string weapon in SecondaryWeapon)
+        {
+            GameObject.Find(weapon).SetActive(false);
+        }
+        foreach (string weapon in Throwables)
+        {
+            GameObject.Find(weapon).SetActive(false);
+        }
+    }
+
+    void ActivateMainWeapon()
+    {
+
+        //GameObject.Find(SecondaryWeaponName).SetActive(false);
+        //GameObject.Find(ThrowableName).SetActive(false);
+
+        if (MainWeaponName == "M4")
         {
             M4.SetActive(true);
         }
 
-        else if(MainWeaponName == "M200")
+        else if (MainWeaponName == "M200")
         {
             M200.SetActive(true);
         }
 
-        else if(MainWeaponName == "MP5")
+        else if (MainWeaponName == "MP5")
         {
             MP5.SetActive(true);
         }
 
-        else if(MainWeaponName == "PKM")
+        else if (MainWeaponName == "PKM")
         {
             PKM.SetActive(true);
         }
 
-        //Activate Secondary Weapon
+        activeWeapon = 0;
+    }
+
+    void ActivateSecondary()
+    {
+       // GameObject.Find(MainWeaponName).SetActive(false);
+       // GameObject.Find(ThrowableName).SetActive(false);
+
         if (SecondaryWeaponName == "Knife")
         {
             Knife.SetActive(true);
@@ -145,19 +184,44 @@ public class Inventory : MonoBehaviour
             SPAS12.SetActive(true);
         }
 
-        //Activate Throwable
-        if(ThrowableName == "Grenade")
+        else if(SecondaryWeaponName == "M9")
+        {
+            M9.SetActive(true);
+        }
+
+        activeWeapon = 1;
+    }
+
+    void ActivateThrowable()
+    {
+       // GameObject.Find(MainWeaponName).SetActive(false);
+       // GameObject.Find(SecondaryWeaponName).SetActive(false);
+
+        if (ThrowableName == "Grenade")
         {
             F1.SetActive(true);
         }
+
+        activeWeapon = 2;
     }
 
-    void SetInventoryText()
+    void DeactivateActiveWeapon()
     {
-        InventoryMainWeapon.text = MainWeaponName;
-        InventorySecondaryWeapon.text = SecondaryWeaponName;
-        InventoryThrowable.text = ThrowableName;
-}
+        if(activeWeapon == 0)
+        {
+            GameObject.Find(MainWeaponName).SetActive(false);
+        }
 
+        else if(activeWeapon == 1)
+        {
+            GameObject.Find(SecondaryWeaponName).SetActive(false);
 
+        }
+
+        else if(activeWeapon == 2)
+        {
+            GameObject.Find(ThrowableName).SetActive(false);
+
+        }
+    }
 }
