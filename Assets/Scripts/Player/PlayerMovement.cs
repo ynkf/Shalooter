@@ -2,166 +2,301 @@
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Player")]
     [SerializeField]
-    private float _groundAcceleration = 200f;         // How fast the player accelerates on the ground
+    private Camera _playerView;
     [SerializeField]
-    private float _airAcceleleration = 200f;      // How fast the player accelerates in the air
-    [SerializeField]
-    private float _maxGroundSpeed = 6.4f;      // Maximum player speed on the ground
-    [SerializeField]
-    private float _maxAirSpeed = 0.6f;   // "Maximum" player speed in the air
-    [SerializeField]
-    private float _groundFriction = 8f;        // How fast the player decelerates on the ground
-    [SerializeField]
-    private float _jumpForce = 5f;       // How high the player jumps
-    [SerializeField]
-    private LayerMask _groundLayers;
+    private float _playerViewYOffset = 0.6f;
 
+    [Header("Environment")]
     [SerializeField]
-    private Camera _firstPersonCamera;
+    private float _gravity = 20.0f;
+    [SerializeField]
+    private float _groundFriction = 6;
 
-    private float _lastJumpPress = -1f;
-    private float _jumpPressDuration = 0.1f;
-    private bool _isOnGround = false;
+    [Header("Movement")]
+    [SerializeField]
+    private float _moveSpeed = 7.0f;
+    [SerializeField]
+    private float _runAcceleration = 14.0f;
+    [SerializeField]
+    private float _runDeacceleration = 10.0f;
+    [SerializeField]
+    private float _airAcceleration = 2.0f;
+    [SerializeField]
+    private float _airDecceleration = 2.0f;
+    [SerializeField]
+    private float _airControlPrecision = 0.3f;
+    [SerializeField]
+    private float _sideStrafeAcceleration = 50.0f;
+    [SerializeField]
+    private float _sideStrafeMaxSpeed = 1.0f;
+    [SerializeField]
+    private float _jumpAcceleration = 8.0f;
+    [SerializeField]
+    private bool _holdJumpToBhop = false;
+
+    private CharacterController _controller;
+    private PlayerMovementCommands _movementCommand;
+
+    //Debug Values for Unity Editor
+    private Vector3 _moveDirectionNorm = Vector3.zero;
+    private Vector3 _playerVelocity = Vector3.zero;
+    private float _playerTopVelocity = 0.0f;
+    private bool _wishToJump = false;
+    private float _playerFriction = 0.0f;
+
+    private void Start()
+    {
+        HideAndFixCursor();
+        SetupPlayerView();
+
+        _controller = GetComponent<CharacterController>();
+    }
 
     private void Update()
     {
-        if (Input.GetButton("Jump"))
+        CheckCursor();
+
+        QueueJump();
+
+        if (_controller.isGrounded)
+            GroundMove();
+        else if (!_controller.isGrounded)
+            AirMove();
+
+        _controller.Move(_playerVelocity * Time.deltaTime);
+
+        Vector3 udp = _playerVelocity;
+        udp.y = 0.0f;
+        if (udp.magnitude > _playerTopVelocity)
+            _playerTopVelocity = udp.magnitude;
+
+        MovePlayerView();
+    }
+
+    private void HideAndFixCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void CheckCursor()
+    {
+        if (Cursor.lockState != CursorLockMode.Locked)
         {
-            _lastJumpPress = Time.time;
+            if (Input.GetButtonDown("Fire1"))
+                Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
-    private void FixedUpdate()
+    private void SetupPlayerView()
     {
-        if(Input.GetKey(KeyCode.X))
+        if (_playerView == null)
         {
-            GetComponent<Rigidbody>().MovePosition(new Vector3(0f, 1f, 0f));
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+                _playerView = mainCamera;
         }
 
-        Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        MovePlayerView();
+    }
 
-        // Get player velocity
-        Vector3 playerVelocity = GetComponent<Rigidbody>().velocity;
+    private void MovePlayerView()
+    {
+        _playerView.transform.position = new Vector3(
+            transform.position.x,
+            transform.position.y + _playerViewYOffset,
+            transform.position.z);
+    }
 
-        if (CheckGround() && input.magnitude == 0f)
+    private void SetMovementDirection()
+    {
+        _movementCommand.forward = Input.GetAxisRaw("Vertical");
+        _movementCommand.right = Input.GetAxisRaw("Horizontal");
+    }
+
+    private void QueueJump()
+    {
+        if (_holdJumpToBhop)
         {
-            print("velocity == 0");
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            _wishToJump = Input.GetButton("Jump");
             return;
         }
 
-        print($"velocity={GetComponent<Rigidbody>().velocity.magnitude}");
-        // Slow down if on ground
-        playerVelocity = CalculateFriction(playerVelocity);
-        // Add player input
-        playerVelocity += CalculateMovement(input, playerVelocity);
-        // Assign new velocity to player object
-        GetComponent<Rigidbody>().velocity = playerVelocity;
+        if (Input.GetButtonDown("Jump") && !_wishToJump)
+            _wishToJump = true;
+        if (Input.GetButtonUp("Jump"))
+            _wishToJump = false;
     }
 
-    /// <summary>
-    /// Slows down the player if on ground
-    /// </summary>
-    /// <param name="currentVelocity">Velocity of the player</param>
-    /// <returns>Modified velocity of the player</returns>
-	private Vector3 CalculateFriction(Vector3 currentVelocity)
+    private void AirMove()
     {
-        _isOnGround = CheckGround();
-        float speed = currentVelocity.magnitude;
+        Vector3 wishdir;
+        float accel;
 
-        if (!_isOnGround || Input.GetButton("Jump") || speed == 0f)
-            return currentVelocity;
+        SetMovementDirection();
 
-        float drop = speed * _groundFriction * Time.deltaTime;
-        return currentVelocity * (Mathf.Max(speed - drop, 0f) / speed);
-    }
+        wishdir = new Vector3(_movementCommand.right, 0, _movementCommand.forward);
+        wishdir = transform.TransformDirection(wishdir);
 
-    /// <summary>
-    /// Moves the player according to the input. (THIS IS WHERE THE STRAFING MECHANIC HAPPENS)
-    /// </summary>
-    /// <param name="input">Horizontal and vertical axis of the user input</param>
-    /// <param name="velocity">Current velocity of the player</param>
-    /// <returns>Additional velocity of the player</returns>
-    private Vector3 CalculateMovement(Vector2 input, Vector3 velocity)
-    {
-        _isOnGround = CheckGround();
+        float wishspeed = wishdir.magnitude;
+        wishspeed *= _moveSpeed;
 
-        //Different acceleration values for ground and air
-        float curAccel = _groundAcceleration;
-        if (!_isOnGround)
-            curAccel = _airAcceleleration;
+        wishdir.Normalize();
+        _moveDirectionNorm = wishdir;
 
-        //Ground speed
-        float curMaxSpeed = _maxGroundSpeed;
+        float wishspeed2 = wishspeed;
 
-        //Air speed
-        if (!_isOnGround)
-            curMaxSpeed = _maxAirSpeed;
+        accel = Vector3.Dot(_playerVelocity, wishdir) < 0 ? _airDecceleration : _airAcceleration;
 
-        //Get rotation input and make it a vector
-        Vector3 camRotation = new Vector3(0f, _firstPersonCamera.transform.rotation.eulerAngles.y, 0f);
-        Vector3 inputVelocity = Quaternion.Euler(camRotation) *
-                                new Vector3(input.x * curAccel, 0f, input.y * curAccel);
-
-        //Ignore vertical component of rotated input
-        Vector3 alignedInputVelocity = new Vector3(inputVelocity.x, 0f, inputVelocity.z) * Time.deltaTime;
-
-        //Get current velocity
-        Vector3 currentVelocity = new Vector3(velocity.x, 0f, velocity.z);
-
-        //How close the current speed to max velocity is (1 = not moving, 0 = at/over max speed)
-        float max = Mathf.Max(0f, 1 - (currentVelocity.magnitude / curMaxSpeed));
-
-
-
-        //How perpendicular the input to the current velocity is (0 = 90°)
-        float velocityDot = Vector3.Dot(currentVelocity, alignedInputVelocity);
-
-        //Scale the input to the max speed
-        Vector3 modifiedVelocity = alignedInputVelocity * max;
-
-        //The more perpendicular the input is, the more the input velocity will be applied
-        Vector3 correctVelocity = Vector3.Lerp(alignedInputVelocity, modifiedVelocity, velocityDot);
-        if (correctVelocity.magnitude > curMaxSpeed)
+        if (_movementCommand.forward == 0 && _movementCommand.right != 0)
         {
-            correctVelocity = correctVelocity.normalized * curMaxSpeed;
-        }
-        //Apply jump
-        correctVelocity += GetJumpVelocity(velocity.y);
-
-        
-
-        //Return
-        return correctVelocity;
-    }
-
-    /// <summary>
-    /// Calculates the velocity with which the player is accelerated up when jumping
-    /// </summary>
-    /// <param name="yVelocity">Current "up" velocity of the player (velocity.y)</param>
-    /// <returns>Additional jump velocity for the player</returns>
-	private Vector3 GetJumpVelocity(float yVelocity)
-    {
-        Vector3 jumpVelocity = Vector3.zero;
-
-        if (Time.time < _lastJumpPress + _jumpPressDuration && yVelocity < _jumpForce && CheckGround())
-        {
-            _lastJumpPress = -1f;
-            jumpVelocity = new Vector3(0f, _jumpForce - yVelocity, 0f);
+            if (wishspeed > _sideStrafeMaxSpeed)
+            {
+                wishspeed = _sideStrafeMaxSpeed;
+            }
+                
+            accel = _sideStrafeAcceleration;
         }
 
-        return jumpVelocity;
+        Accelerate(wishdir, wishspeed, accel);
+
+        if (_airControlPrecision > 0)
+        {
+            AirControl(wishdir, wishspeed2);
+        }
+
+        _playerVelocity.y -= _gravity * Time.deltaTime;
     }
 
-    /// <summary>
-    /// Checks if the player is touching the ground. This is a quick hack to make it work, don't actually do it like this.
-    /// </summary>
-    /// <returns>True if the player touches the ground, false if not</returns>
-    private bool CheckGround()
+    private void AirControl(Vector3 wishdir, float wishspeed)
     {
-        Ray ray = new Ray(transform.position, Vector3.down);
-        float distance = GetComponent<Collider>().bounds.extents.y + 0.1f;
-        return Physics.Raycast(ray, distance, _groundLayers);
+        float zspeed;
+        float speed;
+        float dot;
+        float multiplier;
+
+        if (Mathf.Abs(_movementCommand.forward) < 0.001 || Mathf.Abs(wishspeed) < 0.001)
+        {
+            return;
+        }
+
+        zspeed = _playerVelocity.y;
+        _playerVelocity.y = 0;
+
+        speed = _playerVelocity.magnitude;
+        _playerVelocity.Normalize();
+
+        dot = Vector3.Dot(_playerVelocity, wishdir);
+        multiplier = 32;
+        multiplier *= _airControlPrecision * dot * dot * Time.deltaTime;
+
+        if (dot > 0)
+        {
+            _playerVelocity.x = _playerVelocity.x * speed + wishdir.x * multiplier;
+            _playerVelocity.y = _playerVelocity.y * speed + wishdir.y * multiplier;
+            _playerVelocity.z = _playerVelocity.z * speed + wishdir.z * multiplier;
+
+            _playerVelocity.Normalize();
+            _moveDirectionNorm = _playerVelocity;
+        }
+
+        _playerVelocity.x *= speed;
+        _playerVelocity.y = zspeed;
+        _playerVelocity.z *= speed;
+    }
+
+    private void GroundMove()
+    {
+        Vector3 wishdir;
+
+        if (!_wishToJump)
+        {
+            ApplyFriction(1.0f);
+        } else
+        {
+            ApplyFriction(0);
+        }   
+
+        SetMovementDirection();
+
+        wishdir = new Vector3(_movementCommand.right, 0, _movementCommand.forward);
+        wishdir = transform.TransformDirection(wishdir);
+        wishdir.Normalize();
+        _moveDirectionNorm = wishdir;
+
+        var wishspeed = wishdir.magnitude;
+        wishspeed *= _moveSpeed;
+
+        Accelerate(wishdir, wishspeed, _runAcceleration);
+
+        _playerVelocity.y = -_gravity * Time.deltaTime;
+
+        if (_wishToJump)
+        {
+            _playerVelocity.y = _jumpAcceleration;
+            _wishToJump = false;
+        }
+    }
+
+    private void ApplyFriction(float t)
+    {
+        Vector3 vec = _playerVelocity;
+        float speed;
+        float newspeed;
+        float control;
+        float drop;
+
+        vec.y = 0.0f;
+        speed = vec.magnitude;
+        drop = 0.0f;
+
+        if (_controller.isGrounded)
+        {
+            control = speed < _runDeacceleration ? _runDeacceleration : speed;
+            drop = control * _groundFriction * Time.deltaTime * t;
+        }
+
+        newspeed = speed - drop;
+        _playerFriction = newspeed;
+
+        if (newspeed < 0)
+        {
+            newspeed = 0;
+        }
+            
+        if (speed > 0)
+        {
+            newspeed /= speed;
+        }
+
+        _playerVelocity.x *= newspeed;
+        _playerVelocity.z *= newspeed;
+    }
+
+    private void Accelerate(Vector3 wishdir, float wishspeed, float accel)
+    {
+        float addspeed;
+        float accelspeed;
+        float currentspeed;
+
+        currentspeed = Vector3.Dot(_playerVelocity, wishdir);
+        addspeed = wishspeed - currentspeed;
+
+        if (addspeed <= 0)
+        {
+            return;
+        }
+
+        accelspeed = accel * Time.deltaTime * wishspeed;
+
+        if (accelspeed > addspeed)
+        {
+            accelspeed = addspeed;
+        }
+
+        _playerVelocity.x += accelspeed * wishdir.x;
+        _playerVelocity.z += accelspeed * wishdir.z;
     }
 }
