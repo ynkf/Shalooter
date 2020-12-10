@@ -162,6 +162,7 @@ public class Inventory : MonoBehaviour
         }
 
         activeWeapon = 0;
+        InventoryMainWeapon.color = Color.red;
     }
 
     void ActivateSecondary()
@@ -190,6 +191,7 @@ public class Inventory : MonoBehaviour
         }
 
         activeWeapon = 1;
+        InventorySecondaryWeapon.color = Color.red;
     }
 
     void ActivateThrowable()
@@ -203,6 +205,7 @@ public class Inventory : MonoBehaviour
         }
 
         activeWeapon = 2;
+        InventoryThrowable.color = Color.red;
     }
 
     void DeactivateActiveWeapon()
@@ -210,17 +213,20 @@ public class Inventory : MonoBehaviour
         if(activeWeapon == 0)
         {
             GameObject.Find(MainWeaponName).SetActive(false);
+            InventoryMainWeapon.color = Color.white;
         }
 
         else if(activeWeapon == 1)
         {
             GameObject.Find(SecondaryWeaponName).SetActive(false);
+            InventorySecondaryWeapon.color = Color.white;
 
         }
 
         else if(activeWeapon == 2)
         {
             GameObject.Find(ThrowableName).SetActive(false);
+            InventoryThrowable.color = Color.white;
 
         }
     }
