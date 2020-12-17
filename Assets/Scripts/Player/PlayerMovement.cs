@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Player")]
@@ -132,84 +133,84 @@ public class PlayerMovement : MonoBehaviour
 
     private void AirMove()
     {
-        Vector3 wishdir;
+        Vector3 wishDir;
         float accel;
 
         SetMovementDirection();
 
-        wishdir = new Vector3(_movementCommand.right, 0, _movementCommand.forward);
-        wishdir = transform.TransformDirection(wishdir);
+        wishDir = new Vector3(_movementCommand.right, 0, _movementCommand.forward);
+        wishDir = transform.TransformDirection(wishDir);
 
-        float wishspeed = wishdir.magnitude;
-        wishspeed *= _moveSpeed;
+        float wishSpeed = wishDir.magnitude;
+        wishSpeed *= _moveSpeed;
 
-        wishdir.Normalize();
-        _moveDirectionNorm = wishdir;
+        wishDir.Normalize();
+        _moveDirectionNorm = wishDir;
 
-        float wishspeed2 = wishspeed;
+        float wishSpeed2 = wishSpeed;
 
-        accel = Vector3.Dot(_playerVelocity, wishdir) < 0 ? _airDecceleration : _airAcceleration;
+        accel = Vector3.Dot(_playerVelocity, wishDir) < 0 ? _airDecceleration : _airAcceleration;
 
         if (_movementCommand.forward == 0 && _movementCommand.right != 0)
         {
-            if (wishspeed > _sideStrafeMaxSpeed)
+            if (wishSpeed > _sideStrafeMaxSpeed)
             {
-                wishspeed = _sideStrafeMaxSpeed;
+                wishSpeed = _sideStrafeMaxSpeed;
             }
                 
             accel = _sideStrafeAcceleration;
         }
 
-        Accelerate(wishdir, wishspeed, accel);
+        Accelerate(wishDir, wishSpeed, accel);
 
         if (_airControlPrecision > 0)
         {
-            AirControl(wishdir, wishspeed2);
+            AirControl(wishDir, wishSpeed2);
         }
 
         _playerVelocity.y -= _gravity * Time.deltaTime;
     }
 
-    private void AirControl(Vector3 wishdir, float wishspeed)
+    private void AirControl(Vector3 wishDir, float wishSpeed)
     {
-        float zspeed;
-        float speed;
+        float zSpeed;
+        float Speed;
         float dot;
         float multiplier;
 
-        if (Mathf.Abs(_movementCommand.forward) < 0.001 || Mathf.Abs(wishspeed) < 0.001)
+        if (Mathf.Abs(_movementCommand.forward) < 0.001 || Mathf.Abs(wishSpeed) < 0.001)
         {
             return;
         }
 
-        zspeed = _playerVelocity.y;
+        zSpeed = _playerVelocity.y;
         _playerVelocity.y = 0;
 
-        speed = _playerVelocity.magnitude;
+        Speed = _playerVelocity.magnitude;
         _playerVelocity.Normalize();
 
-        dot = Vector3.Dot(_playerVelocity, wishdir);
+        dot = Vector3.Dot(_playerVelocity, wishDir);
         multiplier = 32;
         multiplier *= _airControlPrecision * dot * dot * Time.deltaTime;
 
         if (dot > 0)
         {
-            _playerVelocity.x = _playerVelocity.x * speed + wishdir.x * multiplier;
-            _playerVelocity.y = _playerVelocity.y * speed + wishdir.y * multiplier;
-            _playerVelocity.z = _playerVelocity.z * speed + wishdir.z * multiplier;
+            _playerVelocity.x = _playerVelocity.x * Speed + wishDir.x * multiplier;
+            _playerVelocity.y = _playerVelocity.y * Speed + wishDir.y * multiplier;
+            _playerVelocity.z = _playerVelocity.z * Speed + wishDir.z * multiplier;
 
             _playerVelocity.Normalize();
             _moveDirectionNorm = _playerVelocity;
         }
 
-        _playerVelocity.x *= speed;
-        _playerVelocity.y = zspeed;
-        _playerVelocity.z *= speed;
+        _playerVelocity.x *= Speed;
+        _playerVelocity.y = zSpeed;
+        _playerVelocity.z *= Speed;
     }
 
     private void GroundMove()
     {
-        Vector3 wishdir;
+        Vector3 wishDir;
 
         if (!_wishToJump)
         {
@@ -221,15 +222,15 @@ public class PlayerMovement : MonoBehaviour
 
         SetMovementDirection();
 
-        wishdir = new Vector3(_movementCommand.right, 0, _movementCommand.forward);
-        wishdir = transform.TransformDirection(wishdir);
-        wishdir.Normalize();
-        _moveDirectionNorm = wishdir;
+        wishDir = new Vector3(_movementCommand.right, 0, _movementCommand.forward);
+        wishDir = transform.TransformDirection(wishDir);
+        wishDir.Normalize();
+        _moveDirectionNorm = wishDir;
 
-        var wishspeed = wishdir.magnitude;
+        var wishspeed = wishDir.magnitude;
         wishspeed *= _moveSpeed;
 
-        Accelerate(wishdir, wishspeed, _runAcceleration);
+        Accelerate(wishDir, wishspeed, _runAcceleration);
 
         _playerVelocity.y = -_gravity * Time.deltaTime;
 
@@ -244,7 +245,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 vec = _playerVelocity;
         float speed;
-        float newspeed;
+        float newSpeed;
         float control;
         float drop;
 
@@ -258,45 +259,45 @@ public class PlayerMovement : MonoBehaviour
             drop = control * _groundFriction * Time.deltaTime * t;
         }
 
-        newspeed = speed - drop;
-        _playerFriction = newspeed;
+        newSpeed = speed - drop;
+        _playerFriction = newSpeed;
 
-        if (newspeed < 0)
+        if (newSpeed < 0)
         {
-            newspeed = 0;
+            newSpeed = 0;
         }
             
         if (speed > 0)
         {
-            newspeed /= speed;
+            newSpeed /= speed;
         }
 
-        _playerVelocity.x *= newspeed;
-        _playerVelocity.z *= newspeed;
+        _playerVelocity.x *= newSpeed;
+        _playerVelocity.z *= newSpeed;
     }
 
-    private void Accelerate(Vector3 wishdir, float wishspeed, float accel)
+    private void Accelerate(Vector3 wishDir, float wishSpeed, float accel)
     {
-        float addspeed;
-        float accelspeed;
-        float currentspeed;
+        float addSpeed;
+        float accelSpeed;
+        float currentSpeed;
 
-        currentspeed = Vector3.Dot(_playerVelocity, wishdir);
-        addspeed = wishspeed - currentspeed;
+        currentSpeed = Vector3.Dot(_playerVelocity, wishDir);
+        addSpeed = wishSpeed - currentSpeed;
 
-        if (addspeed <= 0)
+        if (addSpeed <= 0)
         {
             return;
         }
 
-        accelspeed = accel * Time.deltaTime * wishspeed;
+        accelSpeed = accel * Time.deltaTime * wishSpeed;
 
-        if (accelspeed > addspeed)
+        if (accelSpeed > addSpeed)
         {
-            accelspeed = addspeed;
+            accelSpeed = addSpeed;
         }
 
-        _playerVelocity.x += accelspeed * wishdir.x;
-        _playerVelocity.z += accelspeed * wishdir.z;
+        _playerVelocity.x += accelSpeed * wishDir.x;
+        _playerVelocity.z += accelSpeed * wishDir.z;
     }
 }
