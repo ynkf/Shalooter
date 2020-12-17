@@ -19,11 +19,16 @@ public class FirstPersonView : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
 
-        _xRotation -= mouseY;
-
-        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
+        _xRotation = CalculateCameraXRotation(mouseY, _xRotation);
 
         transform.localRotation = Quaternion.Euler(_xRotation, 0, 0);
         _playerBody.Rotate(Vector3.up * mouseX);
+    }
+
+    public float CalculateCameraXRotation(float mouseY, float xRotation)
+    {
+        xRotation -= mouseY;
+
+        return Mathf.Clamp(xRotation, -90f, 90f);
     }
 }
