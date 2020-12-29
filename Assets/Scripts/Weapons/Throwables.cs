@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Throwables : MonoBehaviour
 {
+    public int Damage;
+    public int Radius;
+
     // Start is called before the first frame update
     void Start()
     {
