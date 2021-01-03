@@ -20,28 +20,6 @@ namespace Tests
         }
 
         [Test]
-        public void CalculateFriction_Ground()
-        {
-            var playerVelocity = new Vector3(0f, -0.2f, 7f);
-            float runDeacceleration = 10f;
-            float groundFriction = 6f;
-            float baseFriction = 1f;
-            bool isGrounded = true;
-
-            Vector3 result = PlayerMovementCalculations.CalculateFricition(
-                playerVelocity, 
-                runDeacceleration,
-                groundFriction, 
-                isGrounded, 
-                baseFriction
-            );
-
-            var expected = new Vector3(0f, -0.2f, 0f);
-
-            Assert.AreEqual(expected, result);
-        }
-
-        [Test]
         public void CalculateFriction_Air()
         {
             var playerVelocity = new Vector3(0f, -0.2f, 7f);
