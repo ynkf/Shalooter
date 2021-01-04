@@ -33,6 +33,7 @@ public class Inventory : MonoBehaviour
     public Text InventorySecondaryWeapon;
     public Text InventoryThrowable;
     public Text Healthbar;
+    public Text Ammunition;
 
     //Weapon Selection Screen Text
     public Text SelectorMainWeapon;
@@ -65,6 +66,9 @@ public class Inventory : MonoBehaviour
 
     //Player Health
     private int PlayerHealth = 100;
+
+    //Weapon Ammunation
+    private string ammunation;
 
 
     //integer for telling which weapon is active 0 = main, 1 = secondary, 2 = throwable
@@ -217,21 +221,25 @@ public class Inventory : MonoBehaviour
         if (MainWeaponName == "M4")
         {
             M4.SetActive(true);
+            //M4.Activated();
         }
 
         else if (MainWeaponName == "M200")
         {
             M200.SetActive(true);
+            //M200.Activated();
         }
 
         else if (MainWeaponName == "MP5")
         {
             MP5.SetActive(true);
+            //MP5.Activated();
         }
 
         else if (MainWeaponName == "PKM")
         {
             PKM.SetActive(true);
+            //PKM.Activated();
         }
 
         activeWeapon = 0;
@@ -246,21 +254,25 @@ public class Inventory : MonoBehaviour
         if (SecondaryWeaponName == "Knife")
         {
             Knife.SetActive(true);
+            //Knife.Activated();
         }
 
         else if (SecondaryWeaponName == "RPG7")
         {
             RPG7.SetActive(true);
+            //RPG7.Activated();
         }
 
         else if (SecondaryWeaponName == "SPAS12")
         {
             SPAS12.SetActive(true);
+            //SPAS12.Activated();
         }
 
         else if(SecondaryWeaponName == "M9")
         {
             M9.SetActive(true);
+            //M9.Activated();
         }
 
         activeWeapon = 1;
@@ -275,6 +287,7 @@ public class Inventory : MonoBehaviour
         if (ThrowableName == "Grenade")
         {
             F1.SetActive(true);
+            //F1.Activated();
         }
 
         activeWeapon = 2;
@@ -356,12 +369,14 @@ public class Inventory : MonoBehaviour
     //This is the Method which will update the ammunation display on the screen while shooting
     public void updateAmmo(int magazine, int bullets)
     {
-
+        ammunation = magazine + "/" + bullets;
+        Ammunition.text = ammunation;        
     }
 
     //This is the Method which will update the ammunation display when switching the weapon
     public void switchedWeapon(int magazine, int bullets)
     {
-         
+        ammunation = magazine + "/" + bullets;
+        Ammunition.text = ammunation;
     }
 }
