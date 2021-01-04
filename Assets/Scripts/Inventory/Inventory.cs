@@ -5,7 +5,16 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-
+    /*
+     * This is the Class for the Inventory/Weapon Selector. In the following Class following functions will be treaded:
+     * -Disable/Enable selected Weapon
+     * -Weapon Selector
+     * -Inventory
+     * -Healthbar
+     * -Ammunationdisplay
+     * -Death Screan
+     * Colors: 5AFFFD-->Turkis & 000000-->Black Background(A=228)
+     */
     //Define Buttons
     public Button BeginButton;
     public Button Set1;
@@ -14,18 +23,16 @@ public class Inventory : MonoBehaviour
     public Button Set4;
     public Button Set5;
 
-    public Dropdown MainWeaponDropdown;
-    public Dropdown SecondaryWeaponDropdown;
-    public Dropdown ThrowableDropdown;
-
     //Define Canvas
     public GameObject WeaponSelector;
     public GameObject InventoryBar;
+    public GameObject DeathScreen;
 
     //Inventory Text
     public Text InventoryMainWeapon;
     public Text InventorySecondaryWeapon;
     public Text InventoryThrowable;
+    public Text Healthbar;
 
     //Weapon Selection Screen Text
     public Text SelectorMainWeapon;
@@ -56,6 +63,9 @@ public class Inventory : MonoBehaviour
     List<string> SecondaryWeapon = new List<string>() { "M9", "RPG7", "SPAS12", "Knife" };
     List<string> Throwables = new List<string>() { "Grenade" };
 
+    //Player Health
+    private int PlayerHealth = 100;
+
 
     //integer for telling which weapon is active 0 = main, 1 = secondary, 2 = throwable
     private int activeWeapon = 0;
@@ -63,12 +73,12 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
       {
-
         DeactivateAllWeapons();
         InventoryBar.SetActive(false);
+        DeathScreen.SetActive(false);
         WeaponSet1();
 
-        //add listener on the button
+        //add listener to all the buttons on the Selectorscreen
         Button btnStart = BeginButton.GetComponent<Button>();
         Button btnSet1 = Set1.GetComponent<Button>();
         Button btnSet2 = Set2.GetComponent<Button>();
@@ -113,6 +123,11 @@ public class Inventory : MonoBehaviour
 
         SetInventoryText();
         ActivateMainWeapon();
+
+        Healthbar.text = PlayerHealth.ToString();
+        Healthbar.color = Color.green;
+
+        //!!Also call the function for spawing on the map!!
     }
 
     void WeaponSet1()
@@ -287,5 +302,66 @@ public class Inventory : MonoBehaviour
             InventoryThrowable.color = Color.white;
 
         }
+    }
+
+    //This is the method for showing how much health the player has left.
+    //The parameter is damage. (for ex. The damage he gets is 20 then the parameter int would be 20)
+    public void takeDamage(int damage)
+    {
+        PlayerHealth -= damage;
+        //text for health display
+        Healthbar.text = PlayerHealth.ToString();
+        if( PlayerHealth > 60)
+        {
+            Healthbar.color = Color.green;
+        }
+        
+        else if(PlayerHealth <= 59 && PlayerHealth > 30)
+        {
+            Healthbar.color = Color.yellow;
+        }
+
+        else
+        {
+            Healthbar.color = Color.red;
+        }
+    }
+    
+    //this is the function to call when the player dies. every weapon deactivates, the inventory bar goes away, and the weapons selector shows up after afew seconds.
+    public void die()
+    {
+        /*
+         1. Death Screen
+         2. Deactivate all weapons
+         3. Deactivate inventory
+         4. Wait 3 seconds
+         5. Show Weapon Selector*/
+
+        DeathScreen.SetActive(true);
+        DeactivateAllWeapons();
+        InventoryBar.SetActive(false);
+
+        StartCoroutine(waiter());
+
+        DeathScreen.SetActive(false);
+        WeaponSelector.SetActive(true);
+
+    }
+
+    IEnumerator waiter()
+    {
+        yield return new WaitForSeconds(3.0f); 
+    }
+
+    //This is the Method which will update the ammunation display on the screen while shooting
+    public void updateAmmo(int magazine, int bullets)
+    {
+
+    }
+
+    //This is the Method which will update the ammunation display when switching the weapon
+    public void switchedWeapon(int magazine, int bullets)
+    {
+         
     }
 }
