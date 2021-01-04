@@ -57,7 +57,7 @@ public class Inventory : MonoBehaviour
     List<string> Throwables = new List<string>() { "Grenade" };
 
 
-    //int for telling which weapon is active 0 = main, 1 = secondary, 2 = throwable
+    //integer for telling which weapon is active 0 = main, 1 = secondary, 2 = throwable
     private int activeWeapon = 0;
 
     // Start is called before the first frame update
@@ -117,31 +117,57 @@ public class Inventory : MonoBehaviour
 
     void WeaponSet1()
     {
-        List<string> ListSet1 = new List<string>() { "M4", "M9", "Grenade"};
-        SelectorMainWeapon.Text         = "M4";
-        SelectorSecondaryWeapon.Text    = "M9";
-        SelectorThorwable.Text          = "Grenade";
-                
+        SelectorMainWeapon.text         = "M4";
+        SelectorSecondaryWeapon.text    = "M9";
+        SelectorThorwable.text          = "Grenade";
+
+        MainWeaponName = "M4";
+        SecondaryWeaponName = "M9";
+        ThrowableName = "Grenade";                
     }
 
     void WeaponSet2()
     {
-        List<string> ListSet2 = new List<string>() { "M200", "RPG7", "Grenade" };
+        SelectorMainWeapon.text = "M200";
+        SelectorSecondaryWeapon.text = "RPG7";
+        SelectorThorwable.text = "Grenade";
+
+        MainWeaponName = "M200";
+        SecondaryWeaponName = "RPG7";
+        ThrowableName = "Grenade";
     }
 
     void WeaponSet3()
     {
-        List<string> ListSet3 = new List<string>() { "MP5", "SPAS12", "Grenade" };
+        SelectorMainWeapon.text = "MP5";
+        SelectorSecondaryWeapon.text = "SPAS12";
+        SelectorThorwable.text = "Grenade";
+
+        MainWeaponName = "MP5";
+        SecondaryWeaponName = "SPAS12";
+        ThrowableName = "Grenade";
     }
 
     void WeaponSet4()
     {
-        List<string> ListSet4 = new List<string>() { "PKM", "Knife", "Grenade" };
+        SelectorMainWeapon.text = "PKM";
+        SelectorSecondaryWeapon.text = "Knife";
+        SelectorThorwable.text = "Grenade";
+
+        MainWeaponName = "PKM";
+        SecondaryWeaponName = "Knife";
+        ThrowableName = "Grenade";
     }
 
     void WeaponSet5()
     {
-        List<string> ListSet5 = new List<string>() { "M4", "SPAS12", "Grenade" };
+        SelectorMainWeapon.text = "M4";
+        SelectorSecondaryWeapon.text = "SPAS12";
+        SelectorThorwable.text = "Grenade";
+
+        MainWeaponName = "M4";
+        SecondaryWeaponName = "SPAS12";
+        ThrowableName = "Grenade";
     }
 
     void SetInventoryText()
