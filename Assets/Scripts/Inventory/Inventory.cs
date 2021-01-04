@@ -6,13 +6,17 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
 
-    //Define Dropdowns
+    //Define Buttons
+    public Button BeginButton;
+    public Button Set1;
+    public Button Set2;
+    public Button Set3;
+    public Button Set4;
+    public Button Set5;
+
     public Dropdown MainWeaponDropdown;
     public Dropdown SecondaryWeaponDropdown;
     public Dropdown ThrowableDropdown;
-
-    //Define Buttons
-    public Button BeginButton;
 
     //Define Canvas
     public GameObject WeaponSelector;
@@ -22,6 +26,11 @@ public class Inventory : MonoBehaviour
     public Text InventoryMainWeapon;
     public Text InventorySecondaryWeapon;
     public Text InventoryThrowable;
+
+    //Weapon Selection Screen Text
+    public Text SelectorMainWeapon;
+    public Text SelectorSecondaryWeapon;
+    public Text SelectorThorwable;
 
     //Define MainWeapons
     public GameObject M4;
@@ -47,6 +56,7 @@ public class Inventory : MonoBehaviour
     List<string> SecondaryWeapon = new List<string>() { "M9", "RPG7", "SPAS12", "Knife" };
     List<string> Throwables = new List<string>() { "Grenade" };
 
+
     //int for telling which weapon is active 0 = main, 1 = secondary, 2 = throwable
     private int activeWeapon = 0;
 
@@ -56,14 +66,21 @@ public class Inventory : MonoBehaviour
 
         DeactivateAllWeapons();
         InventoryBar.SetActive(false);
+        WeaponSet1();
 
         //add listener on the button
-        Button btn = BeginButton.GetComponent<Button>();
-        btn.onClick.AddListener(OnClickStart);
-
-        PopulateLists();
-        //add more function for the preparations of the weapons
-
+        Button btnStart = BeginButton.GetComponent<Button>();
+        Button btnSet1 = Set1.GetComponent<Button>();
+        Button btnSet2 = Set2.GetComponent<Button>();
+        Button btnSet3 = Set3.GetComponent<Button>();
+        Button btnSet4 = Set4.GetComponent<Button>();
+        Button btnSet5 = Set5.GetComponent<Button>();
+        btnStart.onClick.AddListener(OnClickStart);
+        btnSet1.onClick.AddListener(WeaponSet1);
+        btnSet2.onClick.AddListener(WeaponSet2);
+        btnSet3.onClick.AddListener(WeaponSet3);
+        btnSet4.onClick.AddListener(WeaponSet4);
+        btnSet5.onClick.AddListener(WeaponSet5);
       }
 
     // Update is called once per frame
@@ -88,28 +105,43 @@ public class Inventory : MonoBehaviour
         }
     }      
 
-    void PopulateLists()
-    {
-        MainWeaponDropdown.AddOptions(MainWeapons);
-        SecondaryWeaponDropdown.AddOptions(SecondaryWeapon);
-        ThrowableDropdown.AddOptions(Throwables);
-    }
-
     void OnClickStart()
-    {
-        MainWeaponName = MainWeaponDropdown.options[MainWeaponDropdown.value].text;
-        SecondaryWeaponName = SecondaryWeaponDropdown.options[SecondaryWeaponDropdown.value].text;
-        ThrowableName = ThrowableDropdown.options[ThrowableDropdown.value].text;
-        print(MainWeaponName + SecondaryWeaponName + ThrowableName);
-
+    {     
         //Hide the big weapon selector and show the smaller inventory
-
         WeaponSelector.SetActive(false);
         InventoryBar.SetActive(true);
 
         SetInventoryText();
         ActivateMainWeapon();
+    }
 
+    void WeaponSet1()
+    {
+        List<string> ListSet1 = new List<string>() { "M4", "M9", "Grenade"};
+        SelectorMainWeapon.Text         = "M4";
+        SelectorSecondaryWeapon.Text    = "M9";
+        SelectorThorwable.Text          = "Grenade";
+                
+    }
+
+    void WeaponSet2()
+    {
+        List<string> ListSet2 = new List<string>() { "M200", "RPG7", "Grenade" };
+    }
+
+    void WeaponSet3()
+    {
+        List<string> ListSet3 = new List<string>() { "MP5", "SPAS12", "Grenade" };
+    }
+
+    void WeaponSet4()
+    {
+        List<string> ListSet4 = new List<string>() { "PKM", "Knife", "Grenade" };
+    }
+
+    void WeaponSet5()
+    {
+        List<string> ListSet5 = new List<string>() { "M4", "SPAS12", "Grenade" };
     }
 
     void SetInventoryText()
