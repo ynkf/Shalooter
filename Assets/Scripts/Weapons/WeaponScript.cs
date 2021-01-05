@@ -14,12 +14,19 @@ public class WeaponScript : MonoBehaviour
     public Inventory Inventory;
 
     private float nextTimeToFire = 0;
+    private AudioSource mAudioSource;
+
+    void Start()
+    {
+        mAudioSource = GetComponent<AudioSource>();
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
+            mAudioSource.Play();
             nextTimeToFire = Time.time + 1f/fireRate;
             Fire();
         }
