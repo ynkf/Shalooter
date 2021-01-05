@@ -130,6 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mouseSensitivity: 100
   _playerBody: {fileID: 3265625734950437526}
+  _photonView: {fileID: -954507310322396382}
 --- !u!1 &3265625734843876968
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,6 +223,8 @@ GameObject:
   - component: {fileID: 3265625734950437526}
   - component: {fileID: 3265625734950437525}
   - component: {fileID: 3265625734950437527}
+  - component: {fileID: -954507310322396382}
+  - component: {fileID: 1822569865962358048}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -275,17 +278,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b842ff3e182a2da4d8383994235b2af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerView: {fileID: 3265625733953013517}
-  playerViewYOffset: 0.6
-  gravity: 20
-  friction: 6
-  moveSpeed: 7
-  runAcceleration: 14
-  runDeacceleration: 10
-  airAcceleration: 2
-  airDecceleration: 2
-  airControl: 0.3
-  sideStrafeAcceleration: 50
-  sideStrafeSpeed: 1
-  jumpSpeed: 8
-  holdJumpToBhop: 0
+  _playerView: {fileID: 3265625733953013513}
+  _playerViewYOffset: 0.6
+  _gravity: 20
+  _groundFriction: 6
+  _moveSpeed: 7
+  _runAcceleration: 14
+  _runDeacceleration: 10
+  _airAcceleration: 2
+  _airDecceleration: 2
+  _airControlPrecision: 0.3
+  _sideStrafeAcceleration: 50
+  _sideStrafeMaxSpeed: 1
+  _jumpAcceleration: 8
+  _holdJumpToBhop: 0
+--- !u!114 &-954507310322396382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3265625734950437531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 0
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 1822569865962358048}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &1822569865962358048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3265625734950437531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
