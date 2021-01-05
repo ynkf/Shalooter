@@ -1,30 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponScript : MonoBehaviour
 {
-    public float damage = 10f;
-    public float range = 100f;
+    public int damage = 10;
+    public int range = 100;
+    public int magazine = 5;
+    public int bullets = 20;
+    public int maxbullets = 20;
+    public int impactForce = 30;
+    public float fireRate = 15;
 
     public Camera Cam;
+    public Inventory Inventory;
+
+    private float nextTimeToFire = 0;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
-            Fire()
+            nextTimeToFire = Time.time + 1f/fireRate;
+            Fire();
         }
     }
 
-    void Shoot()
+    void Fire()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, range))
+        if(magazine != 0)
         {
-            Debug.Log(hit.transform.name);
-            //call damage on player
+            bullets -= 1;
+            if(bullets == 0 && magazine != 0)
+            {
+                bullets = maxbullets;
+                magazine -= 1;
+            }
+
+            if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, range))
+            {
+                Debug.Log(hit.transform.name);
+
+                PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
+                if (target != null)
+                {
+                    target.TakeDamage(damage, 0);
+                }
+
+                if(hit.rigidbody != null)
+                {
+                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                }
+            }
+            Inventory.updateAmmo(magazine, bullets);
         }
+    }
+
+    public void changedWeapon()
+    {
+        Inventory.switchedWeapon(magazine, bullets);
     }
 }

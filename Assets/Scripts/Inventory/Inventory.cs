@@ -215,31 +215,34 @@ public class Inventory : MonoBehaviour
     void ActivateMainWeapon()
     {
 
-        //GameObject.Find(SecondaryWeaponName).SetActive(false);
-        //GameObject.Find(ThrowableName).SetActive(false);
+       //gameObject.Find(SecondaryWeaponName).SetActive(false);
+       // gameObject.Find(ThrowableName).SetActive(false);
 
         if (MainWeaponName == "M4")
         {
             M4.SetActive(true);
-            //M4.Activated();
+            M4.GetComponent<WeaponScript>().changedWeapon();
         }
 
         else if (MainWeaponName == "M200")
         {
             M200.SetActive(true);
-            //M200.Activated();
+            M200.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         else if (MainWeaponName == "MP5")
         {
             MP5.SetActive(true);
-            //MP5.Activated();
+            MP5.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         else if (MainWeaponName == "PKM")
         {
             PKM.SetActive(true);
-            //PKM.Activated();
+            PKM.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         activeWeapon = 0;
@@ -254,25 +257,29 @@ public class Inventory : MonoBehaviour
         if (SecondaryWeaponName == "Knife")
         {
             Knife.SetActive(true);
-            //Knife.Activated();
+            Knife.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         else if (SecondaryWeaponName == "RPG7")
         {
             RPG7.SetActive(true);
-            //RPG7.Activated();
+            RPG7.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         else if (SecondaryWeaponName == "SPAS12")
         {
             SPAS12.SetActive(true);
-            //SPAS12.Activated();
+            SPAS12.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         else if(SecondaryWeaponName == "M9")
         {
             M9.SetActive(true);
-            //M9.Activated();
+            M9.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         activeWeapon = 1;
@@ -287,7 +294,8 @@ public class Inventory : MonoBehaviour
         if (ThrowableName == "Grenade")
         {
             F1.SetActive(true);
-            //F1.Activated();
+            F1.GetComponent<WeaponScript>().changedWeapon();
+
         }
 
         activeWeapon = 2;
@@ -319,9 +327,9 @@ public class Inventory : MonoBehaviour
 
     //This is the method for showing how much health the player has left.
     //The parameter is damage. (for ex. The damage he gets is 20 then the parameter int would be 20)
-    public void takeDamage(int damage)
+    public void takeDamage(int health)
     {
-        PlayerHealth -= damage;
+        PlayerHealth = health;
         //text for health display
         Healthbar.text = PlayerHealth.ToString();
         if( PlayerHealth > 60)
@@ -353,9 +361,7 @@ public class Inventory : MonoBehaviour
         DeathScreen.SetActive(true);
         DeactivateAllWeapons();
         InventoryBar.SetActive(false);
-
         StartCoroutine(waiter());
-
         DeathScreen.SetActive(false);
         WeaponSelector.SetActive(true);
 
