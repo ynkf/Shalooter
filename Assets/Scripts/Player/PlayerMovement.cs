@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
@@ -39,38 +40,53 @@ public class PlayerMovement : MonoBehaviour
 
     private CharacterController _controller;
     private PlayerMovementCommands _movementCommand;
+    private PhotonView _photonView;
 
     private Vector3 _playerVelocity = Vector3.zero;
     private float _playerTopVelocity = 0.0f;
     private bool _wishToJump = false;
 
+    private void Awake()
+    {
+        _photonView = GetComponent<PhotonView>();
+
+        if (_photonView.IsMine)
+        {
+            _controller = GetComponent<CharacterController>();
+        }
+    }
+
     private void Start()
     {
-        HideAndFixCursor();
-        SetupPlayerView();
-
-        _controller = GetComponent<CharacterController>();
+        if (_photonView.IsMine)
+        {
+            HideAndFixCursor();
+            SetupPlayerView();
+        }
     }
 
     private void Update()
     {
-        CheckCursor();
+        if (_photonView.IsMine)
+        {
+            CheckCursor();
 
-        QueueJump();
+            QueueJump();
 
-        if (_controller.isGrounded)
-            GroundMove();
-        else if (!_controller.isGrounded)
-            AirMove();
+            if (_controller.isGrounded)
+                GroundMove();
+            else if (!_controller.isGrounded)
+                AirMove();
 
-        _controller.Move(_playerVelocity * Time.deltaTime);
+            _controller.Move(_playerVelocity * Time.deltaTime);
 
-        Vector3 udp = _playerVelocity;
-        udp.y = 0.0f;
-        if (udp.magnitude > _playerTopVelocity)
-            _playerTopVelocity = udp.magnitude;
+            Vector3 udp = _playerVelocity;
+            udp.y = 0.0f;
+            if (udp.magnitude > _playerTopVelocity)
+                _playerTopVelocity = udp.magnitude;
 
-        MovePlayerView();
+            MovePlayerView();
+        }
     }
 
     private void HideAndFixCursor()
