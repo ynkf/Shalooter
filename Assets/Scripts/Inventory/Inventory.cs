@@ -378,11 +378,4 @@ public class Inventory : MonoBehaviour
         ammunation = magazine + "/" + bullets;
         Ammunition.text = ammunation;        
     }
-
-    //This is the Method which will update the ammunation display when switching the weapon
-    public void switchedWeapon(int magazine, int bullets)
-    {
-        ammunation = magazine + "/" + bullets;
-        Ammunition.text = ammunation;
-    }
 }

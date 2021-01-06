@@ -65,6 +65,6 @@ public class WeaponScript : MonoBehaviour
 
     public void changedWeapon()
     {
-        Inventory.switchedWeapon(magazine, bullets);
+        Inventory.updateAmmo(magazine, bullets);
     }
 }
