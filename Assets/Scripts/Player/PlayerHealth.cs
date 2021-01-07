@@ -6,6 +6,13 @@ public class PlayerHealth : MonoBehaviour
 {
     public int health = 100;
 
+    private Inventory inventory;
+
+    private void Awake()
+    {
+        inventory = GetComponent<Inventory>();
+    }
+
     public void TakeDamage(int damage, int bullet)
     {
         //the bullet is nessecary for later upgrades like magic bullets etc..
@@ -15,7 +22,7 @@ public class PlayerHealth : MonoBehaviour
         {
             try
             {
-                gameObject.GetComponent<Inventory>().takeDamage(health);
+                inventory.takeDamage(health);                
             }
             catch
             {
@@ -41,7 +48,8 @@ public class PlayerHealth : MonoBehaviour
         {
             //do code what happen when he dies (respawn etc..)
             //call UI function
-            gameObject.GetComponent<Inventory>().die();
+            inventory.die();
+            
         }
     }
 }

@@ -46,8 +46,6 @@ public class WeaponScript : MonoBehaviour
 
             if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, range))
             {
-                Debug.Log(hit.transform.name);
-
                 PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
                 if (target != null)
                 {

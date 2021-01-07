@@ -38,7 +38,6 @@ public class Inventory : MonoBehaviour
     //Weapon Selection Screen Text
     public Text SelectorMainWeapon;
     public Text SelectorSecondaryWeapon;
-    public Text SelectorThorwable;
 
     //Define MainWeapons
     public GameObject M4;
@@ -61,8 +60,8 @@ public class Inventory : MonoBehaviour
     private string ThrowableName;
 
     List<string> MainWeapons = new List<string>() { "M4", "M200", "MP5", "PKM" };
-    List<string> SecondaryWeapon = new List<string>() { "M9", "RPG7", "SPAS12", "Knife" };
-    List<string> Throwables = new List<string>() { "Grenade" };
+    List<string> SecondaryWeapon = new List<string>() { "M9", "RPG7", "SPAS12"};
+    List<string> Throwables = new List<string>() { "" };
 
     //Player Health
     private int PlayerHealth = 100;
@@ -76,7 +75,7 @@ public class Inventory : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-      {
+    {
         DeactivateAllWeapons();
         InventoryBar.SetActive(false);
         DeathScreen.SetActive(false);
@@ -95,7 +94,7 @@ public class Inventory : MonoBehaviour
         btnSet3.onClick.AddListener(WeaponSet3);
         btnSet4.onClick.AddListener(WeaponSet4);
         btnSet5.onClick.AddListener(WeaponSet5);
-      }
+    }
 
     // Update is called once per frame
     void Update()
@@ -111,16 +110,10 @@ public class Inventory : MonoBehaviour
             DeactivateActiveWeapon();
             ActivateSecondary();
         }
-
-        if (Input.GetKeyDown("3"))
-        {
-            DeactivateActiveWeapon();
-            ActivateThrowable();
-        }
-    }      
+    }
 
     void OnClickStart()
-    {     
+    {
         //Hide the big weapon selector and show the smaller inventory
         WeaponSelector.SetActive(false);
         InventoryBar.SetActive(true);
@@ -136,57 +129,54 @@ public class Inventory : MonoBehaviour
 
     void WeaponSet1()
     {
-        SelectorMainWeapon.text         = "M4";
-        SelectorSecondaryWeapon.text    = "M9";
-        SelectorThorwable.text          = "Grenade";
+        SelectorMainWeapon.text = "M4";
+        SelectorSecondaryWeapon.text = "M9";
 
         MainWeaponName = "M4";
         SecondaryWeaponName = "M9";
-        ThrowableName = "Grenade";                
+        ThrowableName = "";
     }
 
     void WeaponSet2()
     {
         SelectorMainWeapon.text = "M200";
         SelectorSecondaryWeapon.text = "RPG7";
-        SelectorThorwable.text = "Grenade";
 
         MainWeaponName = "M200";
         SecondaryWeaponName = "RPG7";
-        ThrowableName = "Grenade";
+        ThrowableName = "";
     }
 
     void WeaponSet3()
     {
         SelectorMainWeapon.text = "MP5";
         SelectorSecondaryWeapon.text = "SPAS12";
-        SelectorThorwable.text = "Grenade";
+
 
         MainWeaponName = "MP5";
         SecondaryWeaponName = "SPAS12";
-        ThrowableName = "Grenade";
+        ThrowableName = "";
     }
 
     void WeaponSet4()
     {
         SelectorMainWeapon.text = "PKM";
-        SelectorSecondaryWeapon.text = "Knife";
-        SelectorThorwable.text = "Grenade";
+        SelectorSecondaryWeapon.text = "M9";
+
 
         MainWeaponName = "PKM";
-        SecondaryWeaponName = "Knife";
-        ThrowableName = "Grenade";
+        SecondaryWeaponName = "M9";
+        ThrowableName = "";
     }
 
     void WeaponSet5()
     {
         SelectorMainWeapon.text = "M4";
         SelectorSecondaryWeapon.text = "SPAS12";
-        SelectorThorwable.text = "Grenade";
 
         MainWeaponName = "M4";
         SecondaryWeaponName = "SPAS12";
-        ThrowableName = "Grenade";
+        ThrowableName = "";
     }
 
     void SetInventoryText()
@@ -199,14 +189,10 @@ public class Inventory : MonoBehaviour
     void DeactivateAllWeapons()
     {
         foreach (string weapon in MainWeapons)
-        {             
-            GameObject.Find(weapon).SetActive(false);
-        }
-        foreach (string weapon in SecondaryWeapon)
         {
             GameObject.Find(weapon).SetActive(false);
         }
-        foreach (string weapon in Throwables)
+        foreach (string weapon in SecondaryWeapon)
         {
             GameObject.Find(weapon).SetActive(false);
         }
@@ -215,8 +201,8 @@ public class Inventory : MonoBehaviour
     void ActivateMainWeapon()
     {
 
-       //gameObject.Find(SecondaryWeaponName).SetActive(false);
-       // gameObject.Find(ThrowableName).SetActive(false);
+        //gameObject.Find(SecondaryWeaponName).SetActive(false);
+        // gameObject.Find(ThrowableName).SetActive(false);
 
         if (MainWeaponName == "M4")
         {
@@ -250,18 +236,8 @@ public class Inventory : MonoBehaviour
     }
 
     void ActivateSecondary()
-    {
-       // GameObject.Find(MainWeaponName).SetActive(false);
-       // GameObject.Find(ThrowableName).SetActive(false);
-
-        if (SecondaryWeaponName == "Knife")
-        {
-            Knife.SetActive(true);
-            Knife.GetComponent<WeaponScript>().changedWeapon();
-
-        }
-
-        else if (SecondaryWeaponName == "RPG7")
+    { 
+        if (SecondaryWeaponName == "RPG7")
         {
             RPG7.SetActive(true);
             RPG7.GetComponent<WeaponScript>().changedWeapon();
@@ -279,7 +255,6 @@ public class Inventory : MonoBehaviour
         {
             M9.SetActive(true);
             M9.GetComponent<WeaponScript>().changedWeapon();
-
         }
 
         activeWeapon = 1;
@@ -290,13 +265,6 @@ public class Inventory : MonoBehaviour
     {
        // GameObject.Find(MainWeaponName).SetActive(false);
        // GameObject.Find(SecondaryWeaponName).SetActive(false);
-
-        if (ThrowableName == "Grenade")
-        {
-            F1.SetActive(true);
-            F1.GetComponent<WeaponScript>().changedWeapon();
-
-        }
 
         activeWeapon = 2;
         InventoryThrowable.color = Color.red;
