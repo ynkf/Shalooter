@@ -24,20 +24,21 @@ public class Inventory : MonoBehaviour
     public Button Set5;
 
     //Define Canvas
-    public GameObject WeaponSelector;
-    public GameObject InventoryBar;
-    public GameObject DeathScreen;
+    //public GameObject WeaponSelector;
+    //public GameObject InventoryBar;
+    //public GameObject DeathScreen;
+
 
     //Inventory Text
-    public Text InventoryMainWeapon;
-    public Text InventorySecondaryWeapon;
-    public Text InventoryThrowable;
-    public Text Healthbar;
-    public Text Ammunition;
+    //public Text InventoryMainWeapon;
+    //public Text InventorySecondaryWeapon;
+    //public Text InventoryThrowable;
+    //public Text Healthbar;
+    //public Text Ammunition;
 
     //Weapon Selection Screen Text
-    public Text SelectorMainWeapon;
-    public Text SelectorSecondaryWeapon;
+    //public Text SelectorMainWeapon;
+    //public Text SelectorSecondaryWeapon;
 
     //Define MainWeapons
     public GameObject M4;
@@ -74,26 +75,33 @@ public class Inventory : MonoBehaviour
     private int activeWeapon = 0;
 
     // Start is called before the first frame update
+
     void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         DeactivateAllWeapons();
-        InventoryBar.SetActive(false);
-        DeathScreen.SetActive(false);
+        //InventoryBar.SetActive(false);
+        //DeathScreen.SetActive(false);
         WeaponSet1();
 
         //add listener to all the buttons on the Selectorscreen
-        Button btnStart = BeginButton.GetComponent<Button>();
-        Button btnSet1 = Set1.GetComponent<Button>();
-        Button btnSet2 = Set2.GetComponent<Button>();
-        Button btnSet3 = Set3.GetComponent<Button>();
-        Button btnSet4 = Set4.GetComponent<Button>();
-        Button btnSet5 = Set5.GetComponent<Button>();
-        btnStart.onClick.AddListener(OnClickStart);
-        btnSet1.onClick.AddListener(WeaponSet1);
-        btnSet2.onClick.AddListener(WeaponSet2);
-        btnSet3.onClick.AddListener(WeaponSet3);
-        btnSet4.onClick.AddListener(WeaponSet4);
-        btnSet5.onClick.AddListener(WeaponSet5);
+        //Button btnStart = BeginButton.GetComponent<Button>();
+        //Button btnSet1 = Set1.GetComponent<Button>();
+        //Button btnSet2 = Set2.GetComponent<Button>();
+        //Button btnSet3 = Set3.GetComponent<Button>();
+        //Button btnSet4 = Set4.GetComponent<Button>();
+        //Button btnSet5 = Set5.GetComponent<Button>();
+        //btnStart.onClick.AddListener(OnClickStart);
+        //btnSet1.onClick.AddListener(WeaponSet1);
+        //btnSet2.onClick.AddListener(WeaponSet2);
+        //btnSet3.onClick.AddListener(WeaponSet3);
+        //btnSet4.onClick.AddListener(WeaponSet4);
+        //btnSet5.onClick.AddListener(WeaponSet5);
+
+        WeaponSet1();
+        SetInventoryText();
+        ActivateMainWeapon();
     }
 
     // Update is called once per frame
@@ -115,22 +123,24 @@ public class Inventory : MonoBehaviour
     void OnClickStart()
     {
         //Hide the big weapon selector and show the smaller inventory
-        WeaponSelector.SetActive(false);
-        InventoryBar.SetActive(true);
+        //WeaponSelector.SetActive(false);
+        //InventoryBar.SetActive(true);
 
         SetInventoryText();
         ActivateMainWeapon();
 
-        Healthbar.text = PlayerHealth.ToString();
-        Healthbar.color = Color.green;
+        //Healthbar.text = PlayerHealth.ToString();
+        //Healthbar.color = Color.green;
 
         //!!Also call the function for spawing on the map!!
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void WeaponSet1()
     {
-        SelectorMainWeapon.text = "M4";
-        SelectorSecondaryWeapon.text = "M9";
+        //SelectorMainWeapon.text = "M4";
+        //SelectorSecondaryWeapon.text = "M9";
 
         MainWeaponName = "M4";
         SecondaryWeaponName = "M9";
@@ -139,8 +149,8 @@ public class Inventory : MonoBehaviour
 
     void WeaponSet2()
     {
-        SelectorMainWeapon.text = "M200";
-        SelectorSecondaryWeapon.text = "RPG7";
+        //SelectorMainWeapon.text = "M200";
+        //SelectorSecondaryWeapon.text = "RPG7";
 
         MainWeaponName = "M200";
         SecondaryWeaponName = "RPG7";
@@ -149,8 +159,8 @@ public class Inventory : MonoBehaviour
 
     void WeaponSet3()
     {
-        SelectorMainWeapon.text = "MP5";
-        SelectorSecondaryWeapon.text = "SPAS12";
+        //SelectorMainWeapon.text = "MP5";
+        //SelectorSecondaryWeapon.text = "SPAS12";
 
 
         MainWeaponName = "MP5";
@@ -160,8 +170,8 @@ public class Inventory : MonoBehaviour
 
     void WeaponSet4()
     {
-        SelectorMainWeapon.text = "PKM";
-        SelectorSecondaryWeapon.text = "M9";
+        //SelectorMainWeapon.text = "PKM";
+        //SelectorSecondaryWeapon.text = "M9";
 
 
         MainWeaponName = "PKM";
@@ -171,8 +181,8 @@ public class Inventory : MonoBehaviour
 
     void WeaponSet5()
     {
-        SelectorMainWeapon.text = "M4";
-        SelectorSecondaryWeapon.text = "SPAS12";
+        //SelectorMainWeapon.text = "M4";
+        //SelectorSecondaryWeapon.text = "SPAS12";
 
         MainWeaponName = "M4";
         SecondaryWeaponName = "SPAS12";
@@ -181,9 +191,9 @@ public class Inventory : MonoBehaviour
 
     void SetInventoryText()
     {
-        InventoryMainWeapon.text = MainWeaponName;
-        InventorySecondaryWeapon.text = SecondaryWeaponName;
-        InventoryThrowable.text = ThrowableName;
+        //InventoryMainWeapon.text = MainWeaponName;
+        //InventorySecondaryWeapon.text = SecondaryWeaponName;
+        //InventoryThrowable.text = ThrowableName;
     }
 
     void DeactivateAllWeapons()
@@ -232,7 +242,7 @@ public class Inventory : MonoBehaviour
         }
 
         activeWeapon = 0;
-        InventoryMainWeapon.color = Color.red;
+        //InventoryMainWeapon.color = Color.red;
     }
 
     void ActivateSecondary()
@@ -258,7 +268,7 @@ public class Inventory : MonoBehaviour
         }
 
         activeWeapon = 1;
-        InventorySecondaryWeapon.color = Color.red;
+        //InventorySecondaryWeapon.color = Color.red;
     }
 
     void ActivateThrowable()
@@ -267,7 +277,7 @@ public class Inventory : MonoBehaviour
        // GameObject.Find(SecondaryWeaponName).SetActive(false);
 
         activeWeapon = 2;
-        InventoryThrowable.color = Color.red;
+        //InventoryThrowable.color = Color.red;
     }
 
     void DeactivateActiveWeapon()
@@ -275,20 +285,20 @@ public class Inventory : MonoBehaviour
         if(activeWeapon == 0)
         {
             GameObject.Find(MainWeaponName).SetActive(false);
-            InventoryMainWeapon.color = Color.white;
+            //InventoryMainWeapon.color = Color.white;
         }
 
         else if(activeWeapon == 1)
         {
             GameObject.Find(SecondaryWeaponName).SetActive(false);
-            InventorySecondaryWeapon.color = Color.white;
+            //InventorySecondaryWeapon.color = Color.white;
 
         }
 
         else if(activeWeapon == 2)
         {
             GameObject.Find(ThrowableName).SetActive(false);
-            InventoryThrowable.color = Color.white;
+            //InventoryThrowable.color = Color.white;
 
         }
     }
@@ -299,20 +309,20 @@ public class Inventory : MonoBehaviour
     {
         PlayerHealth = health;
         //text for health display
-        Healthbar.text = PlayerHealth.ToString();
+        //Healthbar.text = PlayerHealth.ToString();
         if( PlayerHealth > 60)
         {
-            Healthbar.color = Color.green;
+            //Healthbar.color = Color.green;
         }
         
         else if(PlayerHealth <= 59 && PlayerHealth > 30)
         {
-            Healthbar.color = Color.yellow;
+            //Healthbar.color = Color.yellow;
         }
 
         else
         {
-            Healthbar.color = Color.red;
+            //Healthbar.color = Color.red;
         }
     }
     
@@ -325,13 +335,12 @@ public class Inventory : MonoBehaviour
          3. Deactivate inventory
          4. Wait 3 seconds
          5. Show Weapon Selector*/
-
-        DeathScreen.SetActive(true);
+        //DeathScreen.SetActive(true);
         DeactivateAllWeapons();
-        InventoryBar.SetActive(false);
+        //InventoryBar.SetActive(false);
         StartCoroutine(waiter());
-        DeathScreen.SetActive(false);
-        WeaponSelector.SetActive(true);
+        //DeathScreen.SetActive(false);
+        //WeaponSelector.SetActive(true);
 
     }
 
@@ -341,9 +350,9 @@ public class Inventory : MonoBehaviour
     }
 
     //This is the Method which will update the ammunation display on the screen while shooting
-    public void updateAmmo(int magazine, int bullets)
-    {
-        ammunation = magazine + "/" + bullets;
-        Ammunition.text = ammunation;        
-    }
+    //public void updateAmmo(int magazine, int bullets)
+    //{
+    //    ammunation = magazine + "/" + bullets;
+    //    Ammunition.text = ammunation;        
+    //}
 }

@@ -21,7 +21,7 @@ public class FirstPersonView : MonoBehaviour
     {
         if (_photonView.IsMine)
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {

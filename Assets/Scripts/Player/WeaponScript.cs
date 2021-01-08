@@ -57,12 +57,12 @@ public class WeaponScript : MonoBehaviour
                     hit.rigidbody.AddForce(-hit.normal * impactForce);
                 }
             }
-            Inventory.updateAmmo(magazine, bullets);
+            //Inventory.updateAmmo(magazine, bullets);
         }
     }
 
     public void changedWeapon()
     {
-        Inventory.updateAmmo(magazine, bullets);
+        //Inventory.updateAmmo(magazine, bullets);
     }
 }

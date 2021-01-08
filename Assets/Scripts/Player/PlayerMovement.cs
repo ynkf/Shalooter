@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_photonView.IsMine)
         {
-            HideAndFixCursor();
+            //HideAndFixCursor();
             SetupPlayerView();
         }
     }
@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_photonView.IsMine)
         {
-            CheckCursor();
+            //CheckCursor();
 
             QueueJump();
 
