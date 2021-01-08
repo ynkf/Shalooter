@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
@@ -39,54 +40,69 @@ public class PlayerMovement : MonoBehaviour
 
     private CharacterController _controller;
     private PlayerMovementCommands _movementCommand;
+    private PhotonView _photonView;
 
     private Vector3 _playerVelocity = Vector3.zero;
     private float _playerTopVelocity = 0.0f;
     private bool _wishToJump = false;
 
+    private void Awake()
+    {
+        _photonView = GetComponent<PhotonView>();
+
+        if (_photonView.IsMine)
+        {
+            _controller = GetComponent<CharacterController>();
+        }
+    }
+
     private void Start()
     {
-        HideAndFixCursor();
-        SetupPlayerView();
-
-        _controller = GetComponent<CharacterController>();
+        if (_photonView.IsMine)
+        {
+            //HideAndFixCursor();
+            SetupPlayerView();
+        }
     }
 
     private void Update()
     {
-        CheckCursor();
-
-        QueueJump();
-
-        if (_controller.isGrounded)
-            GroundMove();
-        else if (!_controller.isGrounded)
-            AirMove();
-
-        _controller.Move(_playerVelocity * Time.deltaTime);
-
-        Vector3 udp = _playerVelocity;
-        udp.y = 0.0f;
-        if (udp.magnitude > _playerTopVelocity)
-            _playerTopVelocity = udp.magnitude;
-
-        MovePlayerView();
-    }
-
-    private void HideAndFixCursor()
-    {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    private void CheckCursor()
-    {
-        if (Cursor.lockState != CursorLockMode.Locked)
+        if (_photonView.IsMine)
         {
-            if (Input.GetButtonDown("Fire1"))
-                Cursor.lockState = CursorLockMode.Locked;
+            //CheckCursor();
+
+            QueueJump();
+
+            if (_controller.isGrounded)
+                GroundMove();
+            else if (!_controller.isGrounded)
+                AirMove();
+
+            _controller.Move(_playerVelocity * Time.deltaTime);
+
+            Vector3 udp = _playerVelocity;
+            udp.y = 0.0f;
+            if (udp.magnitude > _playerTopVelocity)
+                _playerTopVelocity = udp.magnitude;
+
+            MovePlayerView();
         }
     }
+
+    //private void HideAndFixCursor()
+    //{
+    //    Cursor.visible = false;
+    //    Cursor.lockState = CursorLockMode.Locked;
+    //}
+
+    //private void CheckCursor()
+    //{
+    //    if (Cursor.lockState != CursorLockMode.Locked)
+    //    {
+    //        if (Input.GetButtonDown("Fire1"))
+    //            Cursor.lockState = CursorLockMode.Locked;
+    //    }
+    //}
 
     private void SetupPlayerView()
     {
@@ -152,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 wishSpeed = _sideStrafeMaxSpeed;
             }
-                
+
             accel = _sideStrafeAcceleration;
         }
 
@@ -173,10 +189,11 @@ public class PlayerMovement : MonoBehaviour
         if (!_wishToJump)
         {
             _playerVelocity = PlayerMovementCalculations.CalculateFricition(_playerVelocity, _runDeacceleration, _groundFriction, _controller.isGrounded, 1);
-        } else
+        }
+        else
         {
             _playerVelocity = PlayerMovementCalculations.CalculateFricition(_playerVelocity, _runDeacceleration, _groundFriction, _controller.isGrounded, 0);
-        }   
+        }
 
         SetMovementDirection();
 
