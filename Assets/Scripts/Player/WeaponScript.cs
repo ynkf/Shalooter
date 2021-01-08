@@ -35,10 +35,10 @@ public class WeaponScript : MonoBehaviour
     void Fire()
     {
         RaycastHit hit;
-        if(magazine != 0)
+        if (magazine != 0)
         {
             bullets -= 1;
-            if(bullets == 0 && magazine != 0)
+            if (bullets == 0 && magazine != 0)
             {
                 bullets = maxbullets;
                 magazine -= 1;
@@ -52,7 +52,7 @@ public class WeaponScript : MonoBehaviour
                     target.TakeDamage(damage, 0);
                 }
 
-                if(hit.rigidbody != null)
+                if (hit.rigidbody != null)
                 {
                     hit.rigidbody.AddForce(-hit.normal * impactForce);
                 }

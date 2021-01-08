@@ -14,7 +14,7 @@ public class MenuManager : MonoBehaviour
 
     public void OpenMenu(string menuName)
     {
-        foreach(var menu in _menus)
+        foreach (var menu in _menus)
         {
             if (menu.menuName == menuName)
             {
@@ -33,7 +33,7 @@ public class MenuManager : MonoBehaviour
         {
             if (m.isOpen)
             {
-                CloseMenu(m);   
+                CloseMenu(m);
             }
         }
 

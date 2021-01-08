@@ -42,7 +42,7 @@ public class PlayerHealth : MonoBehaviour
 
     void die()
     {
-        if(gameObject.name == "destroyable")
+        if (gameObject.name == "destroyable")
         {
             Destroy(gameObject);
         }

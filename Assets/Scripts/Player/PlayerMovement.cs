@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 wishSpeed = _sideStrafeMaxSpeed;
             }
-                
+
             accel = _sideStrafeAcceleration;
         }
 
@@ -189,10 +189,11 @@ public class PlayerMovement : MonoBehaviour
         if (!_wishToJump)
         {
             _playerVelocity = PlayerMovementCalculations.CalculateFricition(_playerVelocity, _runDeacceleration, _groundFriction, _controller.isGrounded, 1);
-        } else
+        }
+        else
         {
             _playerVelocity = PlayerMovementCalculations.CalculateFricition(_playerVelocity, _runDeacceleration, _groundFriction, _controller.isGrounded, 0);
-        }   
+        }
 
         SetMovementDirection();
 

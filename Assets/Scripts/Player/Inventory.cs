@@ -247,7 +247,7 @@ public class Inventory : MonoBehaviour
     }
 
     void ActivateSecondary()
-    { 
+    {
         if (SecondaryWeaponName == "RPG7")
         {
             RPG7.SetActive(true);
@@ -258,7 +258,7 @@ public class Inventory : MonoBehaviour
             SPAS12.SetActive(true);
             SPAS12.GetComponent<WeaponScript>().changedWeapon();
         }
-        else if(SecondaryWeaponName == "M9")
+        else if (SecondaryWeaponName == "M9")
         {
             M9.SetActive(true);
             M9.GetComponent<WeaponScript>().changedWeapon();
@@ -279,17 +279,17 @@ public class Inventory : MonoBehaviour
 
     void DeactivateActiveWeapon()
     {
-        if(activeWeapon == 0)
+        if (activeWeapon == 0)
         {
             GameObject.Find(MainWeaponName).SetActive(false);
             //InventoryMainWeapon.color = Color.white;
         }
-        else if(activeWeapon == 1)
+        else if (activeWeapon == 1)
         {
             GameObject.Find(SecondaryWeaponName).SetActive(false);
             //InventorySecondaryWeapon.color = Color.white;
         }
-        else if(activeWeapon == 2)
+        else if (activeWeapon == 2)
         {
             GameObject.Find(ThrowableName).SetActive(false);
             //InventoryThrowable.color = Color.white;
@@ -303,11 +303,11 @@ public class Inventory : MonoBehaviour
         PlayerHealth = health;
         //text for health display
         //Healthbar.text = PlayerHealth.ToString();
-        if( PlayerHealth > 60)
+        if (PlayerHealth > 60)
         {
             //Healthbar.color = Color.green;
         }
-        else if(PlayerHealth <= 59 && PlayerHealth > 30)
+        else if (PlayerHealth <= 59 && PlayerHealth > 30)
         {
             //Healthbar.color = Color.yellow;
         }
@@ -316,7 +316,7 @@ public class Inventory : MonoBehaviour
             //Healthbar.color = Color.red;
         }
     }
-    
+
     //this is the function to call when the player dies. every weapon deactivates, the inventory bar goes away, and the weapons selector shows up after afew seconds.
     public void die()
     {
@@ -336,7 +336,7 @@ public class Inventory : MonoBehaviour
 
     IEnumerator waiter()
     {
-        yield return new WaitForSeconds(3.0f); 
+        yield return new WaitForSeconds(3.0f);
     }
 
     //This is the Method which will update the ammunation display on the screen while shooting
