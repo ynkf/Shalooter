@@ -61,8 +61,9 @@ public class Inventory : MonoBehaviour
     private string ThrowableName;
 
     List<string> MainWeapons = new List<string>() { "M4", "M200", "MP5", "PKM" };
-    List<string> SecondaryWeapon = new List<string>() { "M9", "RPG7", "SPAS12"};
+    List<string> SecondaryWeapon = new List<string>() { "M9", "RPG7", "SPAS12" };
     List<string> Throwables = new List<string>() { "" };
+
 
     //Player Health
     private int PlayerHealth = 100;
@@ -251,16 +252,12 @@ public class Inventory : MonoBehaviour
         {
             RPG7.SetActive(true);
             RPG7.GetComponent<WeaponScript>().changedWeapon();
-
         }
-
         else if (SecondaryWeaponName == "SPAS12")
         {
             SPAS12.SetActive(true);
             SPAS12.GetComponent<WeaponScript>().changedWeapon();
-
         }
-
         else if(SecondaryWeaponName == "M9")
         {
             M9.SetActive(true);
@@ -271,14 +268,14 @@ public class Inventory : MonoBehaviour
         //InventorySecondaryWeapon.color = Color.red;
     }
 
-    void ActivateThrowable()
-    {
-       // GameObject.Find(MainWeaponName).SetActive(false);
-       // GameObject.Find(SecondaryWeaponName).SetActive(false);
+    //void ActivateThrowable()
+    //{
+    //GameObject.Find(MainWeaponName).SetActive(false);
+    //GameObject.Find(SecondaryWeaponName).SetActive(false);
 
-        activeWeapon = 2;
-        //InventoryThrowable.color = Color.red;
-    }
+    //activeWeapon = 2;
+    //    InventoryThrowable.color = Color.red;
+    //}
 
     void DeactivateActiveWeapon()
     {
@@ -287,19 +284,15 @@ public class Inventory : MonoBehaviour
             GameObject.Find(MainWeaponName).SetActive(false);
             //InventoryMainWeapon.color = Color.white;
         }
-
         else if(activeWeapon == 1)
         {
             GameObject.Find(SecondaryWeaponName).SetActive(false);
             //InventorySecondaryWeapon.color = Color.white;
-
         }
-
         else if(activeWeapon == 2)
         {
             GameObject.Find(ThrowableName).SetActive(false);
             //InventoryThrowable.color = Color.white;
-
         }
     }
 
@@ -314,12 +307,10 @@ public class Inventory : MonoBehaviour
         {
             //Healthbar.color = Color.green;
         }
-        
         else if(PlayerHealth <= 59 && PlayerHealth > 30)
         {
             //Healthbar.color = Color.yellow;
         }
-
         else
         {
             //Healthbar.color = Color.red;
@@ -341,7 +332,6 @@ public class Inventory : MonoBehaviour
         StartCoroutine(waiter());
         //DeathScreen.SetActive(false);
         //WeaponSelector.SetActive(true);
-
     }
 
     IEnumerator waiter()

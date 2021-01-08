@@ -89,20 +89,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HideAndFixCursor()
-    {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+    //private void HideAndFixCursor()
+    //{
+    //    Cursor.visible = false;
+    //    Cursor.lockState = CursorLockMode.Locked;
+    //}
 
-    private void CheckCursor()
-    {
-        if (Cursor.lockState != CursorLockMode.Locked)
-        {
-            if (Input.GetButtonDown("Fire1"))
-                Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
+    //private void CheckCursor()
+    //{
+    //    if (Cursor.lockState != CursorLockMode.Locked)
+    //    {
+    //        if (Input.GetButtonDown("Fire1"))
+    //            Cursor.lockState = CursorLockMode.Locked;
+    //    }
+    //}
 
     private void SetupPlayerView()
     {

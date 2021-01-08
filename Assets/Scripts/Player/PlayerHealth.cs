@@ -1,6 +1,4 @@
 ﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -33,10 +31,8 @@ public class PlayerHealth : MonoBehaviour
                 }
                 catch
                 {
-
                 }
             }
-
             else
             {
                 die();
@@ -50,13 +46,11 @@ public class PlayerHealth : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
         else
         {
             //do code what happen when he dies (respawn etc..)
             //call UI function
             inventory.die();
-            
         }
     }
 }

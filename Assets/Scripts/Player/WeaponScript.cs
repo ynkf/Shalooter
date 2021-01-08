@@ -27,7 +27,7 @@ public class WeaponScript : MonoBehaviour
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
             mAudioSource.Play();
-            nextTimeToFire = Time.time + 1f/fireRate;
+            nextTimeToFire = Time.time + 1f / fireRate;
             Fire();
         }
     }
